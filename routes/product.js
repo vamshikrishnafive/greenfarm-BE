@@ -14,7 +14,7 @@ const {
     photo,
     listSearch
 } = require("../controllers/product");
-const { requireSignin, isAuth, isAdmin } = require("../controllers/auth");
+const { requireSignin, isAuth, isAdmin } = require("../middleware/Auth.middleware");
 const { userById } = require("../controllers/user");
 
 router.get("/product/:productId", read);

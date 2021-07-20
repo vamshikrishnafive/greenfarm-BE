@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { requireSignin, isAuth, isAdmin } = require("../controllers/auth");
+const { requireSignin, isAuth, isAdmin } = require("../middleware/Auth.middleware");
 const { userById, addOrderToUserHistory } = require("../controllers/user");
 const {
     create,
