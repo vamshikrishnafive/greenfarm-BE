@@ -3,16 +3,10 @@ const router = express.Router();
 
 const { requireSignin, isAuth } = require("../middleware/Auth.middleware");
 const { userById } = require("../controllers/user");
-const { generateToken, processPayment } = require("../controllers/braintree");
+const PaymentProvider = require("../controllers/braintree");
 
-router.get("/braintree/getToken/:userId", requireSignin, isAuth, generateToken);
-router.post(
-    "/braintree/payment/:userId",
-    requireSignin,
-    isAuth,
-    processPayment
-);
-
+router.route("/braintree/getToken/:userId").get(requireSignin, isAuth, PaymentProvider.generateToken);
+router.route("/braintree/payment/:userId").post(requireSignin,isAuth,PaymentProvider.processPayment);
 router.param("userId", userById);
 
 module.exports = router;
