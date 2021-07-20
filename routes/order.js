@@ -1,43 +1,16 @@
 const express = require("express");
-const router = express.Router();
+const router  = express.Router();
 
 const { requireSignin, isAuth, isAdmin } = require("../middleware/Auth.middleware");
 const { userById, addOrderToUserHistory } = require("../controllers/user");
-const {
-    create,
-    listOrders,
-    getStatusValues,
-    orderById,
-    updateOrderStatus
-} = require("../controllers/order");
-const { decreaseQuantity } = require("../controllers/product");
+const Orderdetails = require("../controllers/order");
+const Productdetails = require("../controllers/product");
 
-router.post(
-    "/order/create/:userId",
-    requireSignin,
-    isAuth,
-    addOrderToUserHistory,
-    decreaseQuantity,
-    create
-);
-
-router.get("/order/list/:userId", requireSignin, isAuth, isAdmin, listOrders);
-router.get(
-    "/order/status-values/:userId",
-    requireSignin,
-    isAuth,
-    isAdmin,
-    getStatusValues
-);
-router.put(
-    "/order/:orderId/status/:userId",
-    requireSignin,
-    isAuth,
-    isAdmin,
-    updateOrderStatus
-);
-
+router.route("/order/create/:userId").post(requireSignin,isAuth,addOrderToUserHistory,Productdetails.decreaseQuantity,Orderdetails.create);
+router.route("/order/list/:userId").get(requireSignin, isAuth, isAdmin, Orderdetails.listOrders);
+router.route("/order/status-values/:userId").get(requireSignin,isAuth,isAdmin,Orderdetails.getStatusValues);
+router.route("/order/:orderId/status/:userId").put(requireSignin,isAuth,isAdmin,Orderdetails.updateOrderStatus);
 router.param("userId", userById);
-router.param("orderId", orderById);
+router.param("orderId", Orderdetails.orderById);
 
-module.exports = router;
+module.exports = router.route ;
