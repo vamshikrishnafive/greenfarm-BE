@@ -8,7 +8,7 @@ require("dotenv").config();
 // import routes
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
-const categoryRoutes = require("./routes/category");
+const categoryRoutes = require("./routes/category"); // done till here
 const productRoutes = require("./routes/product");
 const braintreeRoutes = require("./routes/braintree");
 const orderRoutes = require("./routes/order");
