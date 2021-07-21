@@ -1,7 +1,7 @@
 const User = require("../models/user");
 const jwt = require("jsonwebtoken"); // to generate signed token
-const { errorHandler } = require("../helpers/dbErrorHandler");
 const bcrypt = require("bcrypt");
+const { errorHandler } = require("../helpers/dbErrorHandler");
 
 class Authentication {
     /*singup menthod: Find the user based on the email in, if the user found we log User already exist else we save the user details mean while we are hashing the password
@@ -11,7 +11,7 @@ class Authentication {
         try {
             const user = await User.findOne({ email });
             if (user) return res.status(400).json({ message: "User already exist" })
-            const hashed_password = await bcrypt.hash(password, 20)
+            const hashed_password = await bcrypt.hash(password, 12)
             const result = await User.create({ name, email, password: hashed_password, about})
             res.json({ result });
         } catch (error) {
@@ -24,10 +24,11 @@ class Authentication {
         const { email, password } = req.body;
         try {
             const user = await User.findOne({ email })
-            if (!user) {s
+            if (!user) {
                 res.status(400).json({ error: "User with that email does not exist. Please signup" })
             }
-            if (!user.authenticate(password)) {
+            const correctPassword  = await  bcrypt.compare(password, user.password)
+            if (!correctPassword) {
                 return res.status(401).json({ error: "Email and password dont match" });
             }
             const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
