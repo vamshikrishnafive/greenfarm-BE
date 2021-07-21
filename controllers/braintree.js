@@ -1,5 +1,5 @@
-const User = require("../models/user");
 const braintree = require("braintree");
+const Payment = require("../models/payment");
 require("dotenv").config();
 
 const gateway = braintree.connect({
@@ -17,21 +17,17 @@ class PaymentProvider {
         });
     };
 
-    static processPayment = (req, res) => {
+    static async processPayment (req, res) {
         let nonceFromTheClient = req.body.paymentMethodNonce;
         let amountFromTheClient = req.body.amount;
-        // charge
-        let newTransaction = gateway.transaction.sale(
-            {
+        let newTransaction = gateway.transaction.sale({
                 amount: amountFromTheClient,
                 paymentMethodNonce: nonceFromTheClient,
                 options: {submitForSettlement: true}
-            },
-            (error, result) => {
-                if (error) { res.status(500).json(error) } 
-                else { res.json(result) }
-            }
-        );
+            })
+            await Payment.create({newTransaction})
+            .then(response => res.status(200).json(response))
+            .catch(error => res.status(400).json({error: error.message}))
     };
 }
 
