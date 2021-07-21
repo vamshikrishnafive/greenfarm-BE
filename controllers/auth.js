@@ -1,18 +1,18 @@
 const User = require("../models/user");
 const jwt = require("jsonwebtoken"); // to generate signed token
 const { errorHandler } = require("../helpers/dbErrorHandler");
+const bcrypt = require("bcrypt");
 
 class Authentication {
-    /*singup menthod: Find the user based on the email in, if the user found we log User already exist else we save the user details while saving we setting the salt and password to undefined as they both are managed via database methods
+    /*singup menthod: Find the user based on the email in, if the user found we log User already exist else we save the user details mean while we are hashing the password
     */
     static async signup(req, res) {
-        const { name, email } = req.body
+        const { name, email, password, about } = req.body
         try {
             const user = await User.findOne({ email });
             if (user) return res.status(400).json({ message: "User already exist" })
-            const salt = undefined;
-            const hashed_password = undefined;
-            const result = await User.create({ name, email, hashed_password, role, about })
+            const hashed_password = await bcrypt.hash(password, 20)
+            const result = await User.create({ name, email, password: hashed_password, about})
             res.json({ result });
         } catch (error) {
             res.status(404).json({ error: error.message })
@@ -32,8 +32,7 @@ class Authentication {
             }
             const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
             res.cookie("t", token, { expire: new Date() + 9999 });
-            const { _id, name, email, role } = user;
-            return res.status(200).json({ token, user: { _id, email, name, role } });
+            return res.status(200).json({ token, user});
         } catch (error) {
             res.status(404).json({ error: error.message })
         }
