@@ -36,7 +36,7 @@ class Orderdetails {
             // order.products.length
             // order.amount
             const emailData = {
-                to: 'sandeepdme87@gmail.com', // admin
+                to: 'saikrishana9@gmail.com', // admin
                 from: 'noreply@greenfarm.com',
                 subject: `A new order is received`,
                 html: `
