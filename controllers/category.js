@@ -26,7 +26,7 @@ class Categorydetails {
             res.status(400).json({ error: error.messgae })
         }
     }
-    static read = (req, res) => {
+    static read = (re, res) => {
         return res.json(req.category);
     };
     static async update(req, res) {
