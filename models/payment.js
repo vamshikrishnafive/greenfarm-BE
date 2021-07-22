@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
+const { ObjectId } = mongoose.Schema;
 
 const paymentSchema = new mongoose.Schema({
-    amout: Number,
-    paymentMethodNonce : String,
-    options: Boolean
+    amountFromTheClient: Number,
+    userId : { type: ObjectId, ref: "User" },
+    paymentMadeBy: String,
     },{ timestamps: true }
 );
 
