@@ -1,10 +1,12 @@
 const expressJwt = require("express-jwt"); // for authorization check
 const { JWT_SECRET } = require("../constants")
 
-exports.requireSignin  = () => expressJwt({
+exports.requireSignin  = (req, res, next) => {
+    if(expressJwt({
     secret: JWT_SECRET,
-    userProperty: "auth"
-});
+    userProperty: "auth"})) {
+        next();
+    }};
 exports.isAuth = (req, res, next) => {
     let user = req.profile && req.auth && req.profile._id == req.auth._id;
     if (!user) {
