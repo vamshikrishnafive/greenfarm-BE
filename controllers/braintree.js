@@ -1,12 +1,12 @@
 const braintree = require("braintree");
 const Payment = require("../models/payment");
-require("dotenv").config();
+const { BRAINTREE_MERCHANT_ID, BRAINTREE_PRIVATE_KEY, BRAINTREE_PUBLIC_KEY } = require("../constants")
 
 const gateway = braintree.connect({
     environment: braintree.Environment.Sandbox,
-    merchantId: process.env.BRAINTREE_MERCHANT_ID,
-    publicKey: process.env.BRAINTREE_PUBLIC_KEY,
-    privateKey: process.env.BRAINTREE_PRIVATE_KEY
+    merchantId: BRAINTREE_MERCHANT_ID,
+    publicKey: BRAINTREE_PUBLIC_KEY,
+    privateKey: BRAINTREE_PRIVATE_KEY
 });
 
 class PaymentProvider {

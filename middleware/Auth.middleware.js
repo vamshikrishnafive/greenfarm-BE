@@ -1,7 +1,8 @@
 const expressJwt = require("express-jwt"); // for authorization check
+const { JWT_SECRET } = require("../constants")
 
 exports.requireSignin  = () => expressJwt({
-    secret: process.env.JWT_SECRET,
+    secret: JWT_SECRET,
     userProperty: "auth"
 });
 exports.isAuth = (req, res, next) => {
