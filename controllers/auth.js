@@ -9,12 +9,12 @@ class Authentication {
     /*singup menthod: Find the user based on the email in, if the user found we log User already exist else we save the user details mean while we are hashing the password
     */
     static async signup(req, res) {
-        const { name, email, password, about } = req.body
+        const { name, email, password, role } = req.body
         try {
             const user = await User.findOne({ email });
             if (user) return res.status(400).json({ message: "User already exist" })
             const hashed_password = await bcrypt.hash(password, 12)
-            const result = await User.create({ name, email, password: hashed_password, about})
+            const result = await User.create({ name, email, password: hashed_password, role})
             res.json({ result });
         } catch (error) {
             res.status(404).json({ error: error.message })
