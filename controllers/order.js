@@ -117,7 +117,11 @@ class Orderdetails {
     };
 
     static getStatusValues = (req, res) => {
-        res.json(Order.schema.path("status").enumValues);
+        try {
+            res.json(Order.schema.path("status").enumValues);
+        } catch (error) {
+            res.status(400).json({error:"failed to load"})
+        }
     };
 
     static async updateOrderStatus(req, res) {
