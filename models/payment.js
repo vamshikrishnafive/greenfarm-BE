@@ -3,8 +3,7 @@ const { ObjectId } = mongoose.Schema;
 
 const paymentSchema = new mongoose.Schema({
     amountFromTheClient: Number,
-    userId : { type: ObjectId, ref: "User" },
-    paymentMadeBy: String,
+    userId : { type: ObjectId, ref: "User" }
     },{ timestamps: true }
 );
 

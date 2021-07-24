@@ -1,12 +1,12 @@
 const braintree = require("braintree");
 const Payment = require("../models/payment");
-const { BRAINTREE_MERCHANT_ID, BRAINTREE_PRIVATE_KEY, BRAINTREE_PUBLIC_KEY } = require("../constants")
+require("dotenv").config()
 
 const gateway = braintree.connect({
     environment: braintree.Environment.Sandbox,
-    merchantId: BRAINTREE_MERCHANT_ID,
-    publicKey: BRAINTREE_PUBLIC_KEY,
-    privateKey: BRAINTREE_PRIVATE_KEY
+    merchantId: process.env.BRAINTREE_MERCHANT_ID,
+    publicKey: process.env.BRAINTREE_PUBLIC_KEY,
+    privateKey: process.env.BRAINTREE_PRIVATE_KEY
 });
 
 class PaymentProvider {
@@ -25,10 +25,10 @@ class PaymentProvider {
             amount: amountFromTheClient,
             paymentMethodNonce: nonceFromTheClient,
             options: { submitForSettlement: true }
-        })
-        await Payment.create({ paymentMethod: nonceFromTheClient, userId, amountFromTheClient })
-            .then(response => res.status(200).json(response))
-            .catch(error => res.status(400).json({ error: error.message }))
+        }).then(response => res.status(200).json(transaction))
+
+        res.status(400).json(error)
+        await Payment.create({ amountFromTheClient, userId })
     };
     static async getPayments(req, res) {
         await Payment.find().populate("userId", "_id name")
