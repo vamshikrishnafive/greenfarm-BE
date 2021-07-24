@@ -17,7 +17,7 @@ class Orderdetails {
                 req.order = order;
                 next();
             });
-    }; 
+    };
     // your create order method with email capabilities
     static async create(req, res) {
         console.log('CREATE ORDER: ', req.body);
@@ -103,41 +103,39 @@ class Orderdetails {
     };
 
     static async listOrders(req, res) {
-        await Order.find()
-            .populate("user", "_id name address")
-            .sort("-created")
-            .exec((err, orders) => {
-                if (err) {
-                    return res.status(400).json({
-                        error: errorHandler(error)
-                    });
-                }
-                res.json(orders);
-            });
-    };
+        try {
+            await Order.find()
+                .populate("user", "_id name address")
+                .sort("-created")
+                .exec();
+            res.json(orders);
+        } catch (error) {
+            res.status(400).json(errorHandler(error))
+        }
+};
 
     static getStatusValues = (req, res) => {
-        try {
-            res.json(Order.schema.path("status").enumValues);
-        } catch (error) {
-            res.status(400).json({error:"failed to load"})
-        }
-    };
+    try {
+        res.json(Order.schema.path("status").enumValues);
+    } catch (error) {
+        res.status(400).json({ error: "failed to load" })
+    }
+};
 
     static async updateOrderStatus(req, res) {
-        await Order.update(
-            { _id: req.body.orderId },
-            { $set: { status: req.body.status } },
-            (err, order) => {
-                if (err) {
-                    return res.status(400).json({
-                        error: errorHandler(err)
-                    });
-                }
-                res.json(order);
+    await Order.update(
+        { _id: req.body.orderId },
+        { $set: { status: req.body.status } },
+        (err, order) => {
+            if (err) {
+                return res.status(400).json({
+                    error: errorHandler(err)
+                });
             }
-        );
-    };
+            res.json(order);
+        }
+    );
+};
 }
 
 module.exports = Orderdetails;
