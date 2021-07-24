@@ -47,7 +47,7 @@ class Productdetails {
       }
       await product.save((err, result) => {
         if (err) {
-          return res.status(400).json({error: "Something went wrong"})
+          return res.status(400).json({error: err.message})
         }
         res.json(result);
       });
