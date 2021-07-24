@@ -1,8 +1,7 @@
 const User = require("../models/user");
 const jwt = require("jsonwebtoken"); // to generate signed token
 const bcrypt = require("bcrypt");
-
-const { JWT_SECRET } = require("../constants")
+require("dotenv").config()
 const { errorHandler } = require("../helpers/dbErrorHandler");
 
 class Authentication {
@@ -33,7 +32,7 @@ class Authentication {
             if (!correctPassword) {
                 return res.status(401).json({ error: "Email and password dont match" });
             }
-            const token = jwt.sign({ _id: user._id }, JWT_SECRET);
+            const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
             res.cookie("t", token, { expire: new Date() + 9999 });
             return res.status(200).json({ token, user});
         } catch (error) {

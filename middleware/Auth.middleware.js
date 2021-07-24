@@ -1,8 +1,8 @@
 const expressJwt = require("express-jwt"); // for authorization check
-const { JWT_SECRET } = require("../constants");
+require("dotenv").config()
 
 exports.requireSignin = expressJwt({
-    secret: JWT_SECRET,
+    secret: process.env.JWT_SECRET,
     userProperty: "auth",
 });
 
