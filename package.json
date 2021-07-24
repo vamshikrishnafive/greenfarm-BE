@@ -4,14 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "node app.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@sendgrid/mail": "^7.2.0",
-    "body-parser": "^1.19.0",
+    "bcrypt": "^5.0.1",
     "braintree": "^2.16.0",
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
@@ -23,9 +23,10 @@
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
-    "mongoose": "^5.5.5",
+    "mongoose": "^5.13.3",
     "morgan": "^1.9.1",
     "nodemon": "^1.19.0",
+    "sendgrid": "^5.2.3",
     "uuid": "^3.3.2"
   }
 }

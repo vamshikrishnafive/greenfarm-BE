@@ -1,7 +1,6 @@
-<<<<<<< HEAD
+.gitignore
 package-lock.json
+.DS_Store
 .env
 node_modules
-=======
-node_modules
->>>>>>> parent of 8051dca (Update app.js file and separated Db data)
+package-lock.json

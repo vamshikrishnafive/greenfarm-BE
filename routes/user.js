@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
-const { requireSignin, isAuth, isAdmin } = require("../middleware/Auth.middleware");
+const { requireSignin, isAuth, isFarmer } = require("../middleware/Auth.middleware");
 const Userdetails = require("../controllers/user");
 
-router.get("/secret/:userId", requireSignin, isAuth, isAdmin, (req, res) => {
+router.get("/secret/:userId", requireSignin, isAuth, isFarmer, (req, res) => {
     res.json({
         user: req.profile
     });

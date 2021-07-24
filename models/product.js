@@ -7,18 +7,19 @@ const productSchema = new mongoose.Schema(
       type: String,
       trim: true,
       required: true,
-      maxlength: 32,
+      maxlength: 50,
     },
     description: {
       type: String,
       required: true,
-      maxlength: 2000,
+      maxlength: 5000,
     },
     price: {
       type: Number,
       trim: true,
       required: true,
       maxlength: 32,
+      min: 0,
     },
     category: {
       type: ObjectId,
@@ -27,6 +28,7 @@ const productSchema = new mongoose.Schema(
     },
     quantity: {
       type: Number,
+      min: 0,
     },
     postedBy: {
       type: String,

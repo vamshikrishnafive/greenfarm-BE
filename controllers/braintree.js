@@ -1,6 +1,6 @@
-const User = require("../models/user");
 const braintree = require("braintree");
-require("dotenv").config();
+const Payment = require("../models/payment");
+require("dotenv").config()
 
 const gateway = braintree.connect({
     environment: braintree.Environment.Sandbox,
@@ -9,34 +9,32 @@ const gateway = braintree.connect({
     privateKey: process.env.BRAINTREE_PRIVATE_KEY
 });
 
-exports.generateToken = (req, res) => {
-    gateway.clientToken.generate({}, function(err, response) {
-        if (err) {
-            res.status(500).send(err);
-        } else {
-            res.send(response);
-        }
-    });
-};
+class PaymentProvider {
+    static generateToken = (req, res) => {
+        gateway.clientToken.generate({}, function (err, response) {
+            if (err) { res.status(500).send(err) }
+            else { res.send(response) }
+        });
+    };
 
-exports.processPayment = (req, res) => {
-    let nonceFromTheClient = req.body.paymentMethodNonce;
-    let amountFromTheClient = req.body.amount;
-    // charge
-    let newTransaction = gateway.transaction.sale(
-        {
+    static async processPayment(req, res) {
+        let nonceFromTheClient = req.body.paymentMethodNonce;
+        let amountFromTheClient = req.body.amount;
+        let userId = req.params.userId;
+        await gateway.transaction.sale({
             amount: amountFromTheClient,
             paymentMethodNonce: nonceFromTheClient,
-            options: {
-                submitForSettlement: true
-            }
-        },
-        (error, result) => {
-            if (error) {
-                res.status(500).json(error);
-            } else {
-                res.json(result);
-            }
-        }
-    );
-};
+            options: { submitForSettlement: true }
+        }).then(response => res.status(200).json(response))
+            .catch(error => res.status(400).json({ error: error }))
+        await Payment.create({ amountFromTheClient, userId })
+    };
+    static async getPayments(req, res) {
+        await Payment.find().populate("userId", "_id name")
+            .then(respone => res.status(200).json({ result: respone }))
+            .catch(error => res.status(400).json({ error: error.message }))
+    }
+}
+
+module.exports = PaymentProvider;
+
