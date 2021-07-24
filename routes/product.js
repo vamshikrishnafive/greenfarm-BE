@@ -2,13 +2,13 @@ const express = require("express");
 const router = express.Router();
 
 const  Productdetails = require("../controllers/product");
-const { requireSignin, isAuth, isAdmin } = require("../middleware/Auth.middleware");
+const { requireSignin, isAuth, isFarmer } = require("../middleware/Auth.middleware");
 const Userdetails  = require("../controllers/user");
 
 router.route("/product/:productId").get(Productdetails.read);
-router.route("/product/create/:userId").post(requireSignin, isAuth, isAdmin, Productdetails.create);
-router.route("/product/:productId/:userId").delete(requireSignin,isAuth,isAdmin,Productdetails.remove);
-router.route("/product/:productId/:userId").put(requireSignin,isAuth,isAdmin,Productdetails.update);
+router.route("/product/create/:userId").post(requireSignin, isAuth, isFarmer, Productdetails.create);
+router.route("/product/:productId/:userId").delete(requireSignin,isAuth,isFarmer,Productdetails.remove);
+router.route("/product/:productId/:userId").put(requireSignin,isAuth,isFarmer,Productdetails.update);
 router.route("/products").get(Productdetails.list);
 router.route("/products/search").get(Productdetails.listSearch);
 router.route("/products/related/:productId").get(Productdetails.listRelated);
