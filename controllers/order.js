@@ -118,7 +118,7 @@ class Orderdetails {
     try {
         res.json(Order.schema.path("status").enumValues);
     } catch (error) {
-        res.status(400).json({ error: "failed to load" })
+        res.status(400).json(errorHandler(error))
     }
 };
 
